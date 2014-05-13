@@ -1,3 +1,4 @@
+import AssemblyKeys._
 
 name := "sparkling"
 
@@ -22,3 +23,5 @@ libraryDependencies ++= {
     "org.apache.commons"     %  "commons-math"         % "2.2"
   )
 }
+
+assemblySettings
