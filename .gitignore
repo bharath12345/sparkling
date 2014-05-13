@@ -1,0 +1,13 @@
+/.idea/
+/project/boot/
+/project/target
+/project/plugins/project
+/project/plugins/target
+target/
+lib_managed/
+src_managed/
+test-output/
+*.iml
+*.classpath
+*.settings
+*.project
