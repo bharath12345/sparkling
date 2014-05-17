@@ -93,8 +93,13 @@ object LocalFileLinearRegression {
 
 
   def main(args: Array[String]) {
-    val context = new SparkContext("local", "ml-exercise")
-    val fileContents = context.textFile(args(0)).cache()
+    // val context = new SparkContext("local", "ml-exercise")
+    val master: String = "spark://master:7077"
+    val sparkHome: String = "/opt/spark-0.9.0"
+
+    val context: SparkContext = new SparkContext(master, "Test", sparkHome, SparkContext.jarOfObject(this))
+
+    val fileContents = context.textFile("hdfs://master:9000/bharath/ex1data1.txt").cache()
     println("Reading File")
     var labelledRDD = parseFileContent(fileContents).cache()
     println("Running Regression")
