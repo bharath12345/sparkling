@@ -52,7 +52,9 @@ object LocalFileLinearRegression {
   def runLinearRegression(labelledRDD: RDD[LabeledPoint], numberOfIterations: Int, initialWeights:Array[Double], stepSize:Double,miniBatchFraction:Double): LinearRegressionModel = {
     val regression = new LinearRegressionWithSGD()
     regression.optimizer.setNumIterations(numberOfIterations).setStepSize(stepSize).setMiniBatchFraction(miniBatchFraction)
+    println("starting the linear regression run...")
     val linearRegressionModel = regression.run(labelledRDD, initialWeights)
+    println("finished the linear regression run")
     linearRegressionModel
   }
 
@@ -97,13 +99,17 @@ object LocalFileLinearRegression {
     val master: String = "spark://master:7077"
     val sparkHome: String = "/opt/spark-0.9.0"
 
-    val context: SparkContext = new SparkContext(master, "Test", sparkHome, SparkContext.jarOfObject(this))
+    val oldJarWay = SparkContext.jarOfObject(this)
+    val newJarWay = Seq(System.getenv("JARS"))
+
+    val context: SparkContext = new SparkContext(master, "Test", sparkHome, newJarWay)
 
     val fileContents = context.textFile("hdfs://master:9000/bharath/ex1data1.txt").cache()
     println("Reading File")
     var labelledRDD = parseFileContent(fileContents).cache()
     println("Running Regression")
     val featureScaledData = normaliseFeatures(labelledRDD)
+    println("normalizing features done")
     labelledRDD = featureScaledData._1.cache()
     val featureMean = featureScaledData._2
     val featureStd = featureScaledData._3
